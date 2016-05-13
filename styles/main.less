@@ -1,0 +1,54 @@
+@import "flex";
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: @basic-bg;
+  padding: 5px;
+  font-family: @basic-font-family;
+  font-size: 16pt;
+  height: 100%;
+  width: 100%;
+}
+
+.main { background: #fff; }
+
+.input { background: @input-color; }
+.output { background: @output-color; }
+
+.label {
+  .label-size;
+  font-size: @label-font-size;
+  padding: 0 .5em;
+}
+
+.data-wrapper {
+  .data-size;
+  padding: 0 .5em .5em;
+}
+
+.data-container {
+  vertical-align: top;
+  padding: .16em .33em;
+  font: @typed-font-size @basic-font-family;
+  resize: none;
+}
+
+.string { margin: 0; }
+
+.equal,
+.diff,
+.added,
+.deleted {
+  &:before {
+    content: '';
+    display: inline-block;
+    width: 3em;
+    text-align: center;
+  }
+}
+.equal:before { content: ''; }
+.diff:before { content: '*'; }
+.deleted:before { content: '-'; }
+.added:before { content: '+'; }

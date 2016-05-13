@@ -1,0 +1,52 @@
+@import "variables";
+
+/* flex defaults */
+.flex {
+  &-row {
+    flex-direction: row;
+  }
+  &-column {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  &-container {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+  }
+  &-item {
+    position: relative;
+    flex: 1 100%;
+  }
+
+  &-bordered {
+    border: solid @basic-color;
+    &:first-child { border: none; }
+  }
+  &-row > .flex {
+    &-padding { padding: 0 10px; }
+    &-bordered { border-width: 0 0 0 1px; }
+  }
+  &-column > .flex {
+    &-padding { padding: 10px 0; }
+    &-bordered { border-width: 1px 0 0 0; }
+  }
+}
+
+/* blanket settings */
+.blanket {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden
+}
+
+.blanket-scroll { overflow: auto; }
+
+/* fillout */

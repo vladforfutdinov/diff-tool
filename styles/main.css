@@ -1,0 +1,122 @@
+/* variables */
+/* presets */
+.label-size {
+  flex-basis: 50px;
+  line-height: 50px;
+}
+.data-size {
+  flex-basis: 100%;
+}
+/* flex defaults */
+.flex-row {
+  flex-direction: row;
+}
+.flex-column {
+  flex-direction: column;
+  align-items: stretch;
+}
+.flex-container {
+  position: relative;
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+}
+.flex-item {
+  position: relative;
+  flex: 1 100%;
+}
+.flex-bordered {
+  border: solid #333;
+}
+.flex-bordered:first-child {
+  border: none;
+}
+.flex-row > .flex-padding {
+  padding: 0 10px;
+}
+.flex-row > .flex-bordered {
+  border-width: 0 0 0 1px;
+}
+.flex-column > .flex-padding {
+  padding: 10px 0;
+}
+.flex-column > .flex-bordered {
+  border-width: 1px 0 0 0;
+}
+/* blanket settings */
+.blanket {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+}
+.blanket-scroll {
+  overflow: auto;
+}
+/* fillout */
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  background: #ccc;
+  padding: 5px;
+  font-family: sans-serif;
+  font-size: 16pt;
+  height: 100%;
+  width: 100%;
+}
+.main {
+  background: #fff;
+}
+.input {
+  background: #fff2d1;
+}
+.output {
+  background: #e0ffdc;
+}
+.label {
+  flex-basis: 50px;
+  line-height: 50px;
+  font-size: 14pt;
+  padding: 0 .5em;
+}
+.data-wrapper {
+  flex-basis: 100%;
+  padding: 0 .5em .5em;
+}
+.data-container {
+  vertical-align: top;
+  padding: .16em .33em;
+  font: 11pt sans-serif;
+  resize: none;
+}
+.string {
+  margin: 0;
+}
+.equal:before,
+.diff:before,
+.added:before,
+.deleted:before {
+  content: '';
+  display: inline-block;
+  width: 3em;
+  text-align: center;
+}
+.equal:before {
+  content: '';
+}
+.diff:before {
+  content: '*';
+}
+.deleted:before {
+  content: '-';
+}
+.added:before {
+  content: '+';
+}
