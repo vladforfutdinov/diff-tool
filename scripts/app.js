@@ -74,7 +74,6 @@ angular.module('diff-tool', [])
                         startPos = Math.abs(i - j) + 1;
                         stop = i !== j;
 
-                        console.log(startPos);
                         if (stop) break;
                       }
                       if (stop) break;
