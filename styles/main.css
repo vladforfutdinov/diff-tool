@@ -7,6 +7,12 @@
 .data-size {
   flex-basis: 100%;
 }
+.line-num {
+  font-family: monospace;
+  font-size: 9pt;
+  line-height: 1.7;
+  opacity: .33;
+}
 /* flex defaults */
 .flex-row {
   flex-direction: row;
@@ -28,7 +34,7 @@
   flex: 1 100%;
 }
 .flex-bordered {
-  border: solid #333;
+  border: solid #333333;
 }
 .flex-bordered:first-child {
   border: none;
@@ -64,7 +70,7 @@
 html,
 body {
   margin: 0;
-  background: #ccc;
+  background: #cccccc;
   padding: 5px;
   font-family: sans-serif;
   font-size: 16pt;
@@ -90,33 +96,55 @@ body {
   flex-basis: 100%;
   padding: 0 .5em .5em;
 }
+.input-container,
 .data-container {
   vertical-align: top;
   padding: .16em .33em;
   font: 11pt sans-serif;
   resize: none;
 }
+.data-container {
+  padding: .16em 0;
+  counter-reset: num;
+}
 .string {
   margin: 0;
+  counter-increment: num;
 }
-.equal:before,
-.diff:before,
-.added:before,
-.deleted:before {
-  content: '';
+.string span {
   display: inline-block;
-  width: 3em;
-  text-align: center;
+  margin-left: 3.5em;
+  position: relative;
+  white-space: pre-wrap;
 }
-.equal:before {
+.string span:before {
+  content: counter(num);
+  position: absolute;
+  right: 100%;
+  margin-right: 10px;
+  font-family: monospace;
+  font-size: 9pt;
+  line-height: 1.7;
+  opacity: .33;
+}
+.string.equal:before,
+.string.diff:before,
+.string.added:before,
+.string.deleted:before {
+  content: '';
+  position: absolute;
+  left: 0 ;
+  display: inline-block;
+}
+.string.equal:before {
   content: '';
 }
-.diff:before {
+.string.diff:before {
   content: '*';
 }
-.deleted:before {
+.string.deleted:before {
   content: '-';
 }
-.added:before {
+.string.added:before {
   content: '+';
 }

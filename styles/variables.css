@@ -7,3 +7,9 @@
 .data-size {
   flex-basis: 100%;
 }
+.line-num {
+  font-family: monospace;
+  font-size: 9pt;
+  line-height: 1.7;
+  opacity: .33;
+}

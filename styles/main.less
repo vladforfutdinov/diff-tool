@@ -28,27 +28,51 @@ html, body {
   padding: 0 .5em .5em;
 }
 
+.input-container,
 .data-container {
   vertical-align: top;
   padding: .16em .33em;
   font: @typed-font-size @basic-font-family;
   resize: none;
 }
-
-.string { margin: 0; }
-
-.equal,
-.diff,
-.added,
-.deleted {
-  &:before {
-    content: '';
-    display: inline-block;
-    width: 3em;
-    text-align: center;
-  }
+.data-container {
+  padding: .16em 0;
+  counter-reset: num;
 }
-.equal:before { content: ''; }
-.diff:before { content: '*'; }
-.deleted:before { content: '-'; }
-.added:before { content: '+'; }
+
+.string {
+  margin: 0;
+
+  counter-increment: num;
+
+  span {
+    display: inline-block;
+    margin-left: 3.5em;
+    position: relative;
+    white-space: pre-wrap;
+
+    &:before {
+      content: counter(num);
+      position: absolute;
+      right: 100%;
+      margin-right: 10px;
+      .line-num;
+    }
+  }
+
+  &.equal,
+  &.diff,
+  &.added,
+  &.deleted {
+    &:before {
+      content: '';
+      position: absolute;
+      left: 0 ;
+      display: inline-block;
+    }
+  }
+  &.equal:before { content: ''; }
+  &.diff:before { content: '*'; }
+  &.deleted:before { content: '-'; }
+  &.added:before { content: '+'; }
+}

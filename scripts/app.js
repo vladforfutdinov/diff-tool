@@ -10,24 +10,27 @@ angular.module('diff-tool', [])
                 '<div class="input flex-item flex-container flex-column">' +
                 '<label for="left" class="flex-item label">First file</label>' +
                 '<div class="data-wrapper flex-item flex-container">' +
-                '<input-field strings="fields.left" id="left" class="data-container flex-item"></input-field>' +
+                '<input-field strings="fields.left" id="left" class="input-container flex-item"></input-field>' +
                 '</div></div>' +
                 '<div class="output flex-item flex-container flex-column">' +
                 '<label for="right" class="flex-item label">Difference</label>' +
                 '<div class="data-wrapper flex-item flex-container">' +
                 '<div class="data-container flex-item">' +
-                '<p class="string" ng-repeat="item in fields.diff track by $index" ng-class="item.state" ng-bind="item.text"></p>' +
+                '<p class="string" ng-repeat="item in fields.diff track by $index" ng-class="item.state"><span ng-bind="item.text"></span></p>' +
                 '</div></div></div>' +
                 '<div class="input flex-item flex-container flex-column">' +
                 '<label for="right" class="flex-item label">Second file</label>' +
                 '<div class="data-wrapper flex-item flex-container">' +
-                '<input-field strings="fields.right" id="right" class="data-container flex-item"></input-field>' +
+                '<input-field strings="fields.right" id="right" class="input-container flex-item"></input-field>' +
                 '</div></div></div></div>',
       link:     function (scope) {
-        var isEmpty = function (val) {
+        var isEmpty    = function (val) {
               return val == undefined || val.length === 0;
             },
-            compare = function (arr1, arr2) {
+            getTrimmed = function (val) {
+              return (val || '').trim();
+            },
+            compare    = function (arr1, arr2) {
               var result  = [],
                   aligned = align(arr1, arr2),
                   max     = aligned[0].length > aligned[1].length ? aligned[0].length : aligned[1].length;
@@ -35,9 +38,13 @@ angular.module('diff-tool', [])
               for (var i = 0; i < max; i++) {
                 var val1    = aligned[0][i],
                     val2    = aligned[1][i],
-                    isEqual = val1 === val2,
-                    empty1  = isEmpty(val1),
-                    isDiff  = !empty1 && !isEmpty(val2) && val1 !== val2;
+                    trim1   = getTrimmed(val1),
+                    trim2   = getTrimmed(val2),
+                    isEqual = trim1 === trim2,
+                    empty1  = isEmpty(trim1),
+                    isDiff  = !empty1 && !isEmpty(trim2) && trim1 !== trim2;
+
+                console.log(val1, val2);
 
                 result.push({
                   text:  isEqual ? val1 : (isDiff ? val1 + ' | ' + val2 : (empty1 ? val2 : val1)),
@@ -47,7 +54,7 @@ angular.module('diff-tool', [])
 
               return result;
             },
-            align   = function (arr1, arr2) {
+            align      = function (arr1, arr2) {
               var startPos = 0,
                   result   = [arr1.slice(), arr2.slice()],
                   insert   = function (arr, pos, qty) {
@@ -69,7 +76,7 @@ angular.module('diff-tool', [])
 
                   for (var j = startPos, lj = result[1].length; j < lj; j++) {
                     for (var i = startPos, li = result[0].length; i < li; i++) {
-                      if (result[0][i] === result[1][j]) {
+                      if (getTrimmed(result[0][i]) === getTrimmed(result[1][j])) {
                         addLines(i, j);
                         startPos = Math.abs(i - j) + 1;
                         stop = i !== j;
@@ -120,6 +127,3 @@ angular.module('diff-tool', [])
       }
     }
   });
-
-
-

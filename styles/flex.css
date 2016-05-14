@@ -7,6 +7,12 @@
 .data-size {
   flex-basis: 100%;
 }
+.line-num {
+  font-family: monospace;
+  font-size: 9pt;
+  line-height: 1.7;
+  opacity: .33;
+}
 /* flex defaults */
 .flex-row {
   flex-direction: row;
@@ -28,7 +34,7 @@
   flex: 1 100%;
 }
 .flex-bordered {
-  border: solid #333;
+  border: solid #333333;
 }
 .flex-bordered:first-child {
   border: none;
