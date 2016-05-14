@@ -23,16 +23,16 @@ angular.module('diff-tool', [])
                 '<div class="data-wrapper flex-item flex-container">' +
                 '<input-field strings="fields.right" id="right" class="data-container flex-item"></input-field>' +
                 '</div></div></div></div>',
-      link:     function (scope, elem, attrs) {
+      link:     function (scope) {
         var isEmpty = function (val) {
               return val == undefined || val.length === 0;
             },
             compare = function (arr1, arr2) {
               var result  = [],
-                  max     = arr1.length > arr2.length ? arr1.length : arr2.length,
-                  aligned = align(arr1, arr2);
+                  aligned = align(arr1, arr2),
+                  max     = aligned[0].length > aligned[1].length ? aligned[0].length : aligned[1].length;
 
-              for (var i = 0; i <= max; i++) {
+              for (var i = 0; i < max; i++) {
                 var val1    = aligned[0][i],
                     val2    = aligned[1][i],
                     isEqual = val1 === val2,
@@ -48,30 +48,33 @@ angular.module('diff-tool', [])
               return result;
             },
             align   = function (arr1, arr2) {
-              var result   = [arr1.slice(), arr2.slice()],
+              var startPos = 0,
+                  result   = [arr1.slice(), arr2.slice()],
                   insert   = function (arr, pos, qty) {
                     for (var i = 0; i < qty; i++) {
                       arr.splice(pos, 0, '');
                     }
                   },
-                  addLines = function (a, b) {
-                    if (a < b)
-                      insert(result[0], a, b - a);
+                  addLines = function (arr1Pos, arr2Pos) {
+                    if (arr1Pos < arr2Pos)
+                      insert(result[0], arr1Pos, arr2Pos - arr1Pos);
 
-                    if (a > b)
-                      insert(result[1], b, a - b);
+                    if (arr1Pos > arr2Pos)
+                      insert(result[1], arr2Pos, arr1Pos - arr2Pos);
                   };
 
               if (!isEmpty(arr1) && !isEmpty(arr2))
                 while (result[0].length !== result[1].length) {
                   var stop = false;
 
-                  for (var i = 0, li = result[0].length; i < li; i++) {
-                    for (var j = 0, lj = result[1].length; j < lj; j++) {
+                  for (var j = startPos, lj = result[1].length; j < lj; j++) {
+                    for (var i = startPos, li = result[0].length; i < li; i++) {
                       if (result[0][i] === result[1][j]) {
                         addLines(i, j);
+                        startPos = Math.abs(i - j) + 1;
                         stop = i !== j;
 
+                        console.log(startPos);
                         if (stop) break;
                       }
                       if (stop) break;
@@ -106,7 +109,8 @@ angular.module('diff-tool', [])
       replace:  true,
       template: '<textarea ng-model="text"></textarea>',
       link:     function (scope, elem, attrs) {
-        scope.text = scope.debug;
+        if (angular.isDefined(attrs.debug))
+          scope.text = scope.debug;
 
         scope.$watch('text', function (data) {
           if (angular.isUndefined(data) || data === '') return;
