@@ -4,7 +4,9 @@ angular.module('diff-tool', [])
   .directive('diffToot', function () {
     return {
       restrict: 'E',
-      scope:    {},
+      scope:    {
+        sections: '@'
+      },
       replace:  true,
       template: '<div><div class="main flex-item flex-container flex-row">' +
                 '<div class="input flex-item flex-container flex-column">' +
@@ -24,12 +26,8 @@ angular.module('diff-tool', [])
                 '<input-field strings="fields.right" id="right" class="input-container flex-item"></input-field>' +
                 '</div></div></div></div>',
       link:     function (scope) {
-        var isEmpty    = function (val) {
-              return val == undefined || val.length === 0;
-            },
-            getTrimmed = function (val) {
-              return (val || '').trim();
-            },
+        var isEmpty    = function (val) {return val == undefined || val.length === 0;},
+            getTrimmed = function (val) {return (val || '').trim();},
             compare    = function (arr1, arr2) {
               var result  = [],
                   aligned = align(arr1, arr2),
@@ -43,8 +41,6 @@ angular.module('diff-tool', [])
                     isEqual = trim1 === trim2,
                     empty1  = isEmpty(trim1),
                     isDiff  = !empty1 && !isEmpty(trim2) && trim1 !== trim2;
-
-                console.log(val1, val2);
 
                 result.push({
                   text:  isEqual ? val1 : (isDiff ? val1 + ' | ' + val2 : (empty1 ? val2 : val1)),
@@ -92,9 +88,15 @@ angular.module('diff-tool', [])
                 }
 
               return result;
+            },
+
+            init       = function () {
+              scope.fields = {left: [], right: [], diff: []};
             };
 
-        scope.fields = {left: [], right: [], diff: []};
+        scope.fields = {};
+
+        init();
 
         scope.$watchGroup(['fields.left', 'fields.right'], function (data) {
           if (angular.isUndefined(data)) return;
