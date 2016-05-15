@@ -9,22 +9,19 @@ angular.module('diff-tool', [])
       },
       replace:  true,
       template: '<div><div class="main flex-item flex-container flex-row">' +
+                '<div class="fieldset flex-item flex-container flex-row" ng-repeat="field in fields track by $index">' +
                 '<div class="input flex-item flex-container flex-column">' +
-                '<label for="left" class="flex-item label">First file</label>' +
+                '<label for="left" class="flex-item label">Section <span ng-bind="$index + 1"></span></label>' +
                 '<div class="data-wrapper flex-item flex-container">' +
-                '<input-field strings="fields.left" id="left" class="input-container flex-item"></input-field>' +
+                '<input-field strings="fields[$index]" id="left" class="input-container flex-item"></input-field>' +
                 '</div></div>' +
-                '<div class="output flex-item flex-container flex-column">' +
+                '<div class="output flex-item flex-container flex-column" ng-if="diffs[$index]">' +
                 '<label for="right" class="flex-item label">Difference</label>' +
                 '<div class="data-wrapper flex-item flex-container">' +
                 '<div class="data-container flex-item">' +
-                '<p class="string" ng-repeat="item in fields.diff track by $index" ng-class="item.state"><span ng-bind="item.text"></span></p>' +
+                '<p class="string" ng-repeat="item in diffs[$index] track by $index" ng-class="item.state"><span ng-bind="item.text"></span></p>' +
                 '</div></div></div>' +
-                '<div class="input flex-item flex-container flex-column">' +
-                '<label for="right" class="flex-item label">Second file</label>' +
-                '<div class="data-wrapper flex-item flex-container">' +
-                '<input-field strings="fields.right" id="right" class="input-container flex-item"></input-field>' +
-                '</div></div></div></div>',
+                '</div></div></div>',
       link:     function (scope) {
         var isEmpty    = function (val) {return val == undefined || val.length === 0;},
             getTrimmed = function (val) {return (val || '').trim();},
@@ -43,7 +40,7 @@ angular.module('diff-tool', [])
                     isDiff  = !empty1 && !isEmpty(trim2) && trim1 !== trim2;
 
                 result.push({
-                  text:  isEqual ? val1 : (isDiff ? val1 + ' | ' + val2 : (empty1 ? val2 : val1)),
+                  text:  isEqual ? val1 : (isDiff ? val1 + ' | ' + trim2 : (empty1 ? val2 : val1)),
                   state: isEqual ? 'equal' : (isDiff ? 'diff' : (empty1 ? 'added' : 'deleted'))
                 });
               }
@@ -90,18 +87,26 @@ angular.module('diff-tool', [])
               return result;
             },
 
-            init       = function () {
-              scope.fields = {left: [], right: [], diff: []};
+            init       = function (sections) {
+              for (var i = 0; i < sections; i++) {
+                scope.fields.push([]);
+
+                if (i < sections - 1)
+                  scope.diffs.push([]);
+              }
             };
 
-        scope.fields = {};
+        scope.fields = [];
+        scope.diffs = [];
 
-        init();
+        init(scope.sections);
 
-        scope.$watchGroup(['fields.left', 'fields.right'], function (data) {
+        scope.$watchCollection('fields', function (data) {
           if (angular.isUndefined(data)) return;
 
-          scope.fields.diff = compare(data[0], data[1]);
+          for (var i = 0; i < scope.diffs.length; i++) {
+            scope.diffs[i] = compare(scope.fields[i], scope.fields[i + 1]);
+          }
         });
       }
     }
@@ -122,10 +127,9 @@ angular.module('diff-tool', [])
 
         scope.$watch('text', function (data) {
           if (angular.isUndefined(data) || data === '') return;
-          scope.strings = (function (text) {
-            return text.split('\n');
-          })(data);
-        })
+
+          scope.strings = data.split('\n');
+        });
       }
     }
   });

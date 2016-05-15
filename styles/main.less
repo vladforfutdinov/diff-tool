@@ -14,6 +14,12 @@ html, body {
 
 .main { background: #fff; }
 
+.fieldset {
+  flex: 2 0;
+
+  &:last-child { flex: 1 0; }
+}
+
 .input { background: @input-color; }
 .output { background: @output-color; }
 
@@ -35,6 +41,7 @@ html, body {
   font: @typed-font-size @basic-font-family;
   resize: none;
 }
+
 .data-container {
   padding: .16em 0;
   counter-reset: num;
@@ -42,12 +49,11 @@ html, body {
 
 .string {
   margin: 0;
-
   counter-increment: num;
 
   span {
     display: inline-block;
-    margin-left: 3.5em;
+    margin-left: 3em;
     position: relative;
     white-space: pre-wrap;
 
@@ -67,7 +73,7 @@ html, body {
     &:before {
       content: '';
       position: absolute;
-      left: 0 ;
+      left: 0;
       display: inline-block;
     }
   }

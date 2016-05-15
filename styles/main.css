@@ -9,7 +9,7 @@
 }
 .line-num {
   font-family: monospace;
-  font-size: 9pt;
+  font-size: 8pt;
   line-height: 1.7;
   opacity: .33;
 }
@@ -80,6 +80,12 @@ body {
 .main {
   background: #fff;
 }
+.fieldset {
+  flex: 2 0;
+}
+.fieldset:last-child {
+  flex: 1 0;
+}
 .input {
   background: #fff2d1;
 }
@@ -89,7 +95,7 @@ body {
 .label {
   flex-basis: 50px;
   line-height: 50px;
-  font-size: 14pt;
+  font-size: 12pt;
   padding: 0 .5em;
 }
 .data-wrapper {
@@ -100,7 +106,7 @@ body {
 .data-container {
   vertical-align: top;
   padding: .16em .33em;
-  font: 11pt sans-serif;
+  font: 9pt sans-serif;
   resize: none;
 }
 .data-container {
@@ -113,7 +119,7 @@ body {
 }
 .string span {
   display: inline-block;
-  margin-left: 3.5em;
+  margin-left: 3em;
   position: relative;
   white-space: pre-wrap;
 }
@@ -123,7 +129,7 @@ body {
   right: 100%;
   margin-right: 10px;
   font-family: monospace;
-  font-size: 9pt;
+  font-size: 8pt;
   line-height: 1.7;
   opacity: .33;
 }
@@ -133,7 +139,7 @@ body {
 .string.deleted:before {
   content: '';
   position: absolute;
-  left: 0 ;
+  left: 0;
   display: inline-block;
 }
 .string.equal:before {
