@@ -1,22 +1,28 @@
 'use strict';
 
 angular.module('diff-tool', [])
-  .directive('diffToot', function () {
+  .directive('diffTool', function () {
     return {
       restrict: 'E',
       scope:    {
         sections: '@'
       },
       replace:  true,
-      template: '<div><div class="main flex-item flex-container flex-row">' +
+      template: '<div class="flex-container flex-column"><div class="main flex-item flex-container flex-row">' +
                 '<div class="fieldset flex-item flex-container flex-row" ng-repeat="field in fields track by $index">' +
                 '<div class="input flex-item flex-container flex-column">' +
-                '<label for="left" class="flex-item label">Section <span ng-bind="$index + 1"></span></label>' +
+                '<label ng-attr-for="field + {{$index}}" class="flex-item flex-container flex-row label">' +
+                '<span class="flex-item title"><span ng-bind="field[0] || \'Section \' + ($index + 1)"></span></span>' +
+                '<span class="flex-item control">' +
+                '<button tabindex="-1" class="btn btn-add btn-add_before" type="button" ng-click="addField($index, -1)"><span>+</span></button>' +
+                '<button tabindex="-1" class="btn" type="button" ng-click="removeField($index)"><span>&ndash;</span></button>' +
+                '<button tabindex="-1" class="btn btn-add btn-add_after" type="button" ng-click="addField($index, +1)"><span>+</span></button>' +
+                '</span></label>' +
                 '<div class="data-wrapper flex-item flex-container">' +
-                '<input-field strings="fields[$index]" id="left" class="input-container flex-item"></input-field>' +
+                '<input-field strings="fields[$index]" ng-attr-id="field + {{$index}}" class="input-container flex-item"></input-field>' +
                 '</div></div>' +
                 '<div class="output flex-item flex-container flex-column" ng-if="diffs[$index]">' +
-                '<label for="right" class="flex-item label">Difference</label>' +
+                '<label class="flex-item label">Difference</label>' +
                 '<div class="data-wrapper flex-item flex-container">' +
                 '<div class="data-container flex-item">' +
                 '<p class="string" ng-repeat="item in diffs[$index] track by $index" ng-class="item.state"><span ng-bind="item.text"></span></p>' +
@@ -105,9 +111,26 @@ angular.module('diff-tool', [])
           if (angular.isUndefined(data)) return;
 
           for (var i = 0; i < scope.diffs.length; i++) {
-            scope.diffs[i] = compare(scope.fields[i], scope.fields[i + 1]);
+            if (scope.fields[i] != '' && scope.fields[i + 1] != '')
+              scope.diffs[i] = compare(scope.fields[i], scope.fields[i + 1]);
           }
         });
+
+        scope.addField = function (index, step) {
+          step = step < 1 ? 0 : step;
+
+          scope.diffs.splice(index + step, 0, []);
+          scope.fields.splice(index + step, 0, []);
+        };
+
+        scope.removeField = function (index) {
+          console.log(index, scope.fields);
+
+          scope.diffs.splice(index, 1);
+          scope.fields.splice(index, 1);
+
+          console.log(index, scope.fields);
+        }
       }
     }
   })
@@ -126,10 +149,17 @@ angular.module('diff-tool', [])
           scope.text = scope.debug;
 
         scope.$watch('text', function (data) {
-          if (angular.isUndefined(data) || data === '') return;
+          if (angular.isUndefined(data)) return;
 
           scope.strings = data.split('\n');
+        });
+
+        scope.$watch('strings', function (data) {
+          if (angular.isUndefined(data)) return;
+
+          scope.text = data.join('\n');
         });
       }
     }
   });
+

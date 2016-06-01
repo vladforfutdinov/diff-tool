@@ -1,8 +1,8 @@
 /* variables */
 /* presets */
 .label-size {
-  flex-basis: 50px;
-  line-height: 50px;
+  flex-basis: 30px;
+  line-height: 30px;
 }
 .data-size {
   flex-basis: 100%;
